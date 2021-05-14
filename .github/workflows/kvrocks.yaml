@@ -3,7 +3,7 @@ name: kvrocks ci actions  # don't edit while the badge was depend on this
 on: [push, pull_request]
 
 jobs:
-  test-lint-build-on-linux:
+  lint-build-test-on-linux:
     strategy:
       matrix:
         os: [ubuntu-18.04]
@@ -47,7 +47,7 @@ jobs:
           sudo apt-get install tcl8.5
           cd tests/tcl && sh runtest && cd -
 
-  test-build-on-macos:
+  build-test-on-macos:
     runs-on: macos-latest
     steps:
       - name: Checkout Code Base
