@@ -13,7 +13,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          brew install snappy gcc@5 autoconf automake libtool
+          brew install snappy gcc autoconf automake libtool
           export PATH=/usr/local/bin:$PATH
           mkdir build
 
