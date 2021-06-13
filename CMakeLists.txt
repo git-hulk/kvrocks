@@ -22,6 +22,7 @@ include(cmake/glog.cmake)
 include(cmake/snappy.cmake)
 include(cmake/rocksdb.cmake)
 include(cmake/libevent.cmake)
+include(cmake/lua.cmake)
 
 list(APPEND EXTERNAL_LIBS PRIVATE ${jemalloc_LIBRARIES})
 list(APPEND EXTERNAL_INCS PRIVATE ${jemalloc_INCLUDE_DIRS})
@@ -38,7 +39,10 @@ list(APPEND EXTERNAL_INCS PRIVATE ${snappy_INCLUDE_DIRS})
 list(APPEND EXTERNAL_LIBS PRIVATE ${libevent_LIBRARIES})
 list(APPEND EXTERNAL_INCS PRIVATE ${libevent_INCLUDE_DIRS})
 
-# End dependences
+list(APPEND EXTERNAL_LIBS PRIVATE ${lua_LIBRARIES})
+list(APPEND EXTERNAL_INCS PRIVATE ${lua_INCLUDE_DIRS})
+
+# End dependencies
 
 # Add git sha to version.h
 find_package(Git REQUIRED)
@@ -58,7 +62,7 @@ if(ENBALE_ASAN)
     target_compile_options(kvrocks PRIVATE -fsanitize=address)
     target_link_libraries(kvrocks PRIVATE -fsanitize=address)
 endif()
-add_dependencies(kvrocks jemalloc libevent glog snappy rocksdb)
+add_dependencies(kvrocks jemalloc libevent glog snappy rocksdb lua)
 target_include_directories(kvrocks PRIVATE ${PROJECT_BINARY_DIR})
 target_include_directories(kvrocks ${EXTERNAL_INCS})
 find_package(Threads REQUIRED)
@@ -323,7 +327,7 @@ add_executable(unittest
         tests/compact_test.cc
         tests/log_collector_test.cc src/config_type.h)
 
-add_dependencies(unittest glog rocksdb snappy jemalloc)
+add_dependencies(unittest glog rocksdb snappy jemalloc lua)
 target_compile_features(unittest PRIVATE cxx_std_11)
 message(${snappy_LIBRARIES})
 target_link_libraries(unittest PRIVATE ${EXTERNAL_LIBS} -lgtest)
