@@ -30,6 +30,7 @@
 #include "worker.h"
 #include "server.h"
 #include "log_collector.h"
+#include "scripting.h"
 
 namespace Redis {
 
@@ -4159,6 +4160,24 @@ class CommandDBName : public Commander {
   }
 };
 
+class CommandEval : public Commander {
+ public:
+  Status Parse(const std::vector<std::string> &args) override {
+    return Status::OK();
+  }
+
+  Status Execute(Server *svr, Connection *conn, std::string *output) override {
+    char funcname[43];
+
+    /* We obtain the script SHA1, then check if this function is already
+     * defined into the Lua state */
+    funcname[0] = 'f';
+    funcname[1] = '_';
+
+    return Lua::evalGenericCommand(conn, args_, false, output);
+  }
+};
+
 #define ADD_CMD(name, arity, description , first_key, last_key, key_step, fn) \
 {name, arity, description, 0, first_key, last_key, key_step, []() -> std::unique_ptr<Commander> { \
   return std::unique_ptr<Commander>(new fn()); \
@@ -4330,6 +4349,8 @@ CommandAttributes redisCommandTable[] = {
     ADD_CMD("flushbackup", 1, "read-only", 0, 0, 0, CommandFlushBackup),
     ADD_CMD("slaveof", 3, "read-only", 0, 0, 0, CommandSlaveOf),
     ADD_CMD("stats", 1, "read-only", 0, 0, 0, CommandStats),
+
+    ADD_CMD("eval", -3, "exclusive write", 0, 0, 0, CommandEval),
 
     ADD_CMD("cluster", -2, "read-only", 0, 0, 0, CommandCluster),
 

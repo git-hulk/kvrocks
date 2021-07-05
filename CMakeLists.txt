@@ -54,7 +54,7 @@ configure_file(src/version.h.in ${PROJECT_BINARY_DIR}/version.h)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 endif()
-add_executable(kvrocks )
+add_executable(kvrocks src/sha1.cc src/sha1.h)
 target_compile_features(kvrocks PRIVATE cxx_std_11)
 target_compile_options(kvrocks PRIVATE -Wall -Wpedantic -g -Wsign-compare -Wreturn-type -fno-omit-frame-pointer -O0)
 option(ENABLE_ASAN "enable ASAN santinizer" OFF)
@@ -146,10 +146,12 @@ target_sources(kvrocks PRIVATE
         src/table_properties_collector.h
         src/compaction_checker.cc
         src/compaction_checker.h
+        src/scripting.cc
+        src/scripting.h
         )
 
 # kvrocks2redis sync tool
-add_executable(kvrocks2redis)
+add_executable(kvrocks2redis src/sha1.cc src/sha1.h)
 target_compile_features(kvrocks2redis PRIVATE cxx_std_11)
 target_compile_options(kvrocks2redis PRIVATE -Wall -Wpedantic -g -Wsign-compare -Wreturn-type)
 option(ENABLE_ASAN "enable ASAN santinizer" OFF)
@@ -240,6 +242,8 @@ target_sources(kvrocks2redis PRIVATE
         src/table_properties_collector.h
         src/compaction_checker.cc
         src/compaction_checker.h
+        src/scripting.cc
+        src/scripting.h
         tools/kvrocks2redis/config.cc
         tools/kvrocks2redis/config.h
         tools/kvrocks2redis/main.cc
@@ -306,6 +310,8 @@ add_executable(unittest
         src/table_properties_collector.h
         src/compaction_checker.cc
         src/compaction_checker.h
+        src/scripting.cc
+        src/scripting.h
         tests/main.cc
         tests/test_base.h
         tests/t_string_test.cc
@@ -325,7 +331,7 @@ add_executable(unittest
         tests/task_runner_test.cc
         tests/t_bitmap_test.cc
         tests/compact_test.cc
-        tests/log_collector_test.cc src/config_type.h)
+        tests/log_collector_test.cc src/config_type.h src/sha1.cc src/sha1.h)
 
 add_dependencies(unittest glog rocksdb snappy jemalloc lua)
 target_compile_features(unittest PRIVATE cxx_std_11)
