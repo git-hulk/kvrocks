@@ -59,13 +59,11 @@ jobs:
         run: |
           unzip sonarcloud-data.zip -d sonarcloud-data
           ls -a sonarcloud-data
+          ls -a build/_deps
 
       - uses: actions/setup-python@v5
         with:
           python-version: 3.x
-      - name: Configure Kvrocks
-        run: |
-          ./x.py build -j$(nproc) --compiler gcc --skip-build
 
       - name: Run sonar-scanner
         env:

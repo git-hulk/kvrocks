@@ -375,7 +375,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: sonarcloud-data
-          path: ${{ env.SONARCLOUD_OUTPUT_DIR }}
+          path: |
+            ${{ env.SONARCLOUD_OUTPUT_DIR }}
+            build/_deps/*-src
 
   check-docker:
     name: Check Docker image
