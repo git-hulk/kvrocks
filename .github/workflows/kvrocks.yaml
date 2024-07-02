@@ -437,6 +437,8 @@ jobs:
       - name: Setup CentOS
         if: ${{ startsWith(matrix.image, 'centos') }}
         run: |
+          ## CentOS 7 is EOL, so replace it with the archive repos.
+          sed -i -e 's/mirrorlist/#mirrorlist/g' -e 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
           yum install -y centos-release-scl-rh
           yum install -y devtoolset-11 python3 python3-pip autoconf automake wget git gcc gcc-c++
           echo "NPROC=$(nproc)" >> $GITHUB_ENV
