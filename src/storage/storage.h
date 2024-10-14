@@ -433,7 +433,7 @@ struct Context {
     ctx.snapshot_ = nullptr;
   }
 
-  const rocksdb::Snapshot * GetSnapshot() {
+  const rocksdb::Snapshot *GetSnapshot() {
     if (snapshot_ == nullptr) {
       snapshot_ = storage->GetDB()->GetSnapshot();  // NOLINT
     }
