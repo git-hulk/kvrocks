@@ -410,7 +410,6 @@ struct Context {
 
   /// TODO: Change it to defer getting the context, and the snapshot is pinned after the first read operation
   explicit Context(engine::Storage *storage) : storage(storage) {
-    auto guard = storage->ReadLockGuard();
     if (!storage->GetConfig()->txn_context_enabled) {
       is_txn_mode = false;
       return;
@@ -419,7 +418,6 @@ struct Context {
   }
   ~Context() {
     if (storage) {
-      auto guard = storage->WriteLockGuard();
       if (storage->GetDB() && snapshot) {
         storage->GetDB()->ReleaseSnapshot(snapshot);
       }
