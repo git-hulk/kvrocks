@@ -405,9 +405,8 @@ struct Context {
   void RefreshLatestSnapshot();
 
   /// TODO: Change it to defer getting the context, and the snapshot is pinned after the first read operation
-  explicit Context(engine::Storage *storage) : storage(storage) {
-    is_txn_mode = storage->GetConfig()->txn_context_enabled;
-  }
+  explicit Context(engine::Storage *storage)
+      : storage(storage), is_txn_mode(storage->GetConfig()->txn_context_enabled) {}
   ~Context() {
     if (storage) {
       if (snapshot_ && storage->GetDB()) {
